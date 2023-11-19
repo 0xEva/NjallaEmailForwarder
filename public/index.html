@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Email Forwarding</title>
+</head>
+<body>
+    <h1>API Status</h1>
+    <div id="apiResponse"></div>
+
+    <script>
+        async function fetchStatus() {
+            const response = await fetch('/api/serverstatus');
+            const data = await response.json();
+            document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
+        }
+
+        fetchStatus();
+    </script>
+    
+    <h2>Add Forward</h2>
+    <form id="addForwardForm">
+        <input type="text" id="addfrom" placeholder="From" required>
+		<span>@YOUR.DOMAIN </span>
+        <input type="text" id="addto" placeholder="To" required>
+        <button type="submit">Add Forward</button>
+    </form>
+
+    <div id="addForwardResponse"></div>
+	
+	<script>
+    document.getElementById('addForwardForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const from = document.getElementById('addfrom').value;
+        const to = document.getElementById('addto').value;
+
+        const response = await fetch('/api/add-forward', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ from, to })
+        });
+        const data = await response.json();
+        document.getElementById('addForwardResponse').textContent = JSON.stringify(data, null, 2);
+    });
+	</script>
+	
+	<h2>Remove Forward</h2>
+    <form id="removeForwardForm">
+        <input type="text" id="removefrom" placeholder="From" required>
+		<span>@YOUR.DOMAIN </span>
+        <input type="text" id="removeto" placeholder="To" required>
+        <button type="submit">Remove Forward</button>
+    </form>
+
+    <div id="removeForwardResponse"></div>
+	
+	<script>
+    document.getElementById('removeForwardForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const from = document.getElementById('removefrom').value;
+        const to = document.getElementById('removeto').value;
+
+        const response = await fetch('/api/remove-forward', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ from, to })
+        });
+        const data = await response.json();
+        document.getElementById('removeForwardResponse').textContent = JSON.stringify(data, null, 2);
+    });
+	</script>
+</body>
+</html>
