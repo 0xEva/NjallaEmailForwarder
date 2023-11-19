@@ -48,7 +48,7 @@ app.post('/api/add-forward', async (req, res) => {
     try {
         const { from, to } = req.body;
         const fullFrom = `${from}@${domain}`;
-		if (fullFrom.includes('*')) {
+        if (fullFrom.includes('*')) {
             return res.status(403).json({ status: 'No Wildcard Alloweed'});
         }
 
@@ -62,17 +62,17 @@ app.post('/api/add-forward', async (req, res) => {
                 "method": "add-forward",
                 "params": {"domain" : domain,
                             "from" : fullFrom,
-							"to" : to },
+                            "to" : to },
                 "jsonrpc": "2.0"
             })
         });
 
         const data = await apiResponse.json();
-		if(data.result){
-			res.json({ status: 'OK'});
-		}else{
-			throw Error;
-		}
+        if(data.result){
+            res.json({ status: 'OK'});
+        }else{
+        throw Error;
+        }
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -83,7 +83,7 @@ app.post('/api/remove-forward', async (req, res) => {
     try {
         const { from, to } = req.body;
         const fullFrom = `${from}@${domain}`;
-		
+        
         const forwardsData = await fetchListForwards();
         // Check if the forward exists
         const forwardExists = forwardsData.result.forwards.some(f => (f.from === fullFrom && f.to === to));
@@ -101,17 +101,17 @@ app.post('/api/remove-forward', async (req, res) => {
                 "method": "remove-forward",
                 "params": {"domain" : domain,
                             "from" : fullFrom,
-							"to" : to },
+                            "to" : to },
                 "jsonrpc": "2.0"
             })
         });
 
         const data = await apiResponse.json();
-		if(data.result){
-			res.json({ status: 'OK'});
-		}else{
-			throw Error;
-		}
+        if(data.result){
+            res.json({ status: 'OK'});
+        }else{
+            throw Error;
+        }
     } catch (error) {
         res.status(500).send(error.message);
     }
